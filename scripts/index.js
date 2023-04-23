@@ -12,7 +12,7 @@ const postNewInput = document.querySelector('.post-new-input'); // This is user 
 // User data for name and image so the user is consistent 
 const userData = {
   username: 'Citizen Person',
-  userimg: 'https://api.lorem.space/image/face?w=150&h=150',
+  userimg: 'https://randomuser.me/api/portraits/men/22.jpg',
 };
 
 // Interpolate the variables into the template
@@ -20,7 +20,7 @@ const template = (title, image, time) => {
   return `
       <article class="news-article">
         <header>
-          <img class="news-article" src=${image} alt="${userData.username}">
+          <img class="news-article" src=${userData.userimg} alt="${userData.username}">
           <div>
             <p>${userData.username}</p>
             <p>${time}</p>
@@ -39,12 +39,12 @@ const template = (title, image, time) => {
           <button class="share">
             <i class="fa-solid fa-share-nodes"></i> 
             <span>Share</span> 
-            <span class="count">0</span>
+            <span class="count share-count">0</span>
           </button>
         </footer>
         <div class="posted-coments"></div>
         <div class="news-comments">
-          <img class="news-comments-img" src=${userData.userimg} alt="${userData.username}">
+          <img class="news-comments-img" src="https://randomuser.me/api/portraits/men/22.jpg" alt="${userData.username}">
           <input class="post-comment-input" type="text" placeholder="Write a comment">
           <button class="post-comment">
             <i class="fa-regular fa-paper-plane"></i>
@@ -71,23 +71,72 @@ class Article {
     
     // You can access elements in this.post via query selector, example:
     this.like = this.post.querySelector('.like');
+    this.share = this.post.querySelector('.share');
+    this.comment = this.post.querySelector('.post-comment');
+    
     
     
     // You'll need event listeners for Comment, Like and Share
+    this.like.addEventListener('click', () => {
+      this.updateLike()
+    });
+
+    this.share.addEventListener('click', () => {
+      this.updateShare()
+    });
+
+    this.comment.addEventListener('click', () => {
+      this.updateComments()
+    });
   }
   updateComments() {
+
+    let comment = this.post.querySelector('.post-comment-input').value
+    let commentDiv = this.post.querySelector('.posted-coments')
+
     // Output the comments to the DOM in a <p> tag
+
+    const newPTag = document.createElement('p')
+    newPTag.innerHTML = comment
+    
+
+    commentDiv.appendChild(newPTag)
+
     // Clear the input field
+    this.post.querySelector('.post-comment-input').value = ''
   }
   updateLike() {
-    // Update the like count
-    // Add the "active" class name to the Like div
-    // Output the like count to the dom
+
+    console.log('liked', event)
+    console.log(this.like.innerText)
+    const likeButton = this.like;
+
+    // // Update the like count
+    this.likeCount ++;
+
+    // // Add the "active" class name to the Like div
+
+    likeButton.classList = 'active';
+
+    // // Output the like count to the dom
+
+    this.post.querySelector('.count').innerHTML = this.likeCount
+
   }
   updateShare() {
+
+    const shareButton = this.share;
     // Update the share count
+
+    this.shareCount ++
+
     // Add the "active" class name to the Share div
+
+    shareButton.classlist = 'active'
+
     // Output the share count to the dom
+
+    this.post.querySelector('.share-count').innerHTML = this.shareCount
   }
   output() {
     // Output the post to the feed
